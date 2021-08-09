@@ -1,1 +1,674 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>connect() | react-redux</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="connect() - React Redux" />
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/82270353?s=400&v=4" />
+<meta property="og:locale" content="ja" />
+<link rel="canonical" href="https://japanese-document.github.io/react-redux/connect.html" />
+<meta property="og:url" content="https://japanese-document.github.io/react-redux/connect.html" />
+<meta property="og:site_name" content="react-redux" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="connect()" />
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=ENIZbt1ZNh1V2iSpgvww7KUXZxXXWMvYaBYZh19NxplU4xZxnEwuG0QY3LTcqfoGzS_vnG7Hj3tGakgeXyTlnYZesyUkmVDs1IFfObY3EQQ" charset="UTF-8"></script><script type="application/ld+json">
+{"headline":"connect()","url":"https://japanese-document.github.io/react-redux/connect.html","@type":"WebPage","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/react-redux/assets/css/style.css?v=98d08b1365ea8ef4788d83766fc91fcabaf7d5cf">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/react-redux/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://japanese-document.github.io/react-redux/">react-redux</a></h1>
+      
+
+      <h1 id="connect">connect()</h1>
+
+<h2 id="概要">概要</h2>
+
+<p><code class="language-plaintext highlighter-rouge">connect()</code>関数はReactコンポーネントをRedux storeに接続するために使います。</p>
+
+<p><code class="language-plaintext highlighter-rouge">connect()</code>関数(の戻り値)はstoreから必要なデータを抽出して接続済みコンポーネントに渡します。また、<code class="language-plaintext highlighter-rouge">connect()</code>関数(の戻り値)はactionをstoreにdispatchすることができる関数も接続済みコンポーネントに渡します。</p>
+
+<p><code class="language-plaintext highlighter-rouge">connect()</code>関数(の戻り値)は、渡されたコンポーネントクラスに変更を加えません。代わりに、渡されたコンポーネントクラスをラップしたstoreに接続した新しいコンポーネントクラスを返します。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">?,</span> <span class="nx">mapDispatchToProps</span><span class="p">?,</span> <span class="nx">mergeProps</span><span class="p">?,</span> <span class="nx">options</span><span class="p">?)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>は、それぞれ、Redux storeの<code class="language-plaintext highlighter-rouge">state</code>と<code class="language-plaintext highlighter-rouge">dispatch</code>を扱います。<code class="language-plaintext highlighter-rouge">state</code>は<code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数の第1引数として提供されます。<code class="language-plaintext highlighter-rouge">dispatch</code>は<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数の第1引数として提供されます。</p>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>の戻り値をそれぞれ<code class="language-plaintext highlighter-rouge">stateProps</code>と<code class="language-plaintext highlighter-rouge">dispatchProps</code>とします。それらは<code class="language-plaintext highlighter-rouge">mergeProps</code>が定義されていれば、第1引数と第2引数になります。ちなみに第3引数は<code class="language-plaintext highlighter-rouge">ownProps</code>です。それらを統合した<code class="language-plaintext highlighter-rouge">mergeProps</code>の結果は<code class="language-plaintext highlighter-rouge">mergedProps</code>と言われます。それは接続済みコンポーネントに渡されます。</p>
+
+<h2 id="connectの引数"><code class="language-plaintext highlighter-rouge">connect()</code>の引数</h2>
+
+<p><code class="language-plaintext highlighter-rouge">connect</code>は以下の4つの引数を受け取ります。それらはすべてオプションです。</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">mapStateToProps?: Function</code></li>
+  <li><code class="language-plaintext highlighter-rouge">mapDispatchToProps?: Function | Object</code></li>
+  <li><code class="language-plaintext highlighter-rouge">mergeProps?: Function</code></li>
+  <li><code class="language-plaintext highlighter-rouge">options?: Object</code></li>
+</ol>
+
+<h3 id="mapstatetoprops-state-ownprops--object"><code class="language-plaintext highlighter-rouge">mapStateToProps?: (state, ownProps?) =&gt; Object</code></h3>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数が<code class="language-plaintext highlighter-rouge">connect</code>に渡されると新しく生成されるラップしているコンポーネントはRedux storeの更新をsubscribeします。これはstoreが更新される度、<code class="language-plaintext highlighter-rouge">mapStateToProps</code>が実行されることを意味します。<code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数は素のobjectを返す必要があります。これはラップされたコンポーネントのpropsとマージされます。storeの更新をsubscribeしたくない場合は、<code class="language-plaintext highlighter-rouge">mapStateToProps</code>の所に<code class="language-plaintext highlighter-rouge">null</code>か<code class="language-plaintext highlighter-rouge">undefined</code>を渡します。</p>
+
+<h4 id="引数">引数</h4>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">state: Object</code></li>
+  <li><code class="language-plaintext highlighter-rouge">ownProps?: Object</code></li>
+</ol>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数は最大2つの引数を受け取ります。関数の定義に設定された引数の数によって実行されるタイミングが異なります。つまり、定義時にownPropsを受け取るようにしているかしていないかです。
+詳しくは<a href="#mapToProps関数の引数">こちら</a>を見てください。</p>
+
+<h5 id="state"><code class="language-plaintext highlighter-rouge">state</code></h5>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数定義の引数の数が1つの場合、<code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数はstoreのstateが変更される時に実行されます。その時、store stateのみ引数として受け取ります。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">mapStateToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">})</span>
+</code></pre></div></div>
+
+<h5 id="ownprops"><code class="language-plaintext highlighter-rouge">ownProps</code></h5>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数定義の引数の数が2つの場合、storeのstateが変更されるもしくは(浅い(shallow)比較に基づいた)新しいpropsを受け取った時に実行されます。それの第1引数はstoreのstateです。第2引数はラップしている(外側の)コンポーネントが受け取るpropsです。第2引数のことを<code class="language-plaintext highlighter-rouge">ownProps</code>と言います。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">mapStateToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+  <span class="na">todo</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span><span class="p">[</span><span class="nx">ownProps</span><span class="p">.</span><span class="nx">id</span><span class="p">],</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h4 id="戻り値">戻り値</h4>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>の戻り値は、(Factory Functionの場合を除いて)objectである必要があります。そのobjectは<code class="language-plaintext highlighter-rouge">stateProps</code>と言われます。<code class="language-plaintext highlighter-rouge">stateProps</code>は接続済みコンポーネントのpropsにマージ(merge)されます。<code class="language-plaintext highlighter-rouge">stateProps</code>は<code class="language-plaintext highlighter-rouge">mergeProps</code>の第1引数として渡されます。</p>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>の戻り値によって接続済みコンポーネントが再レンダリングされるかが決まります。(詳しくは<a href="https://react-redux.js.org/using-react-redux/connect-mapstate#return-values-determine-if-your-component-re-renders">こちら</a>)</p>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>を使いこなしたい場合は、<a href="https://react-redux.js.org/using-react-redux/connect-mapstate">こちら</a>を見てください。</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>をfactory function(objectでなく関数を返す関数)として定義している場合、その戻り値の関数が<code class="language-plaintext highlighter-rouge">mapStateToProps</code>や<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>として扱われます。詳しくは<a href="#factory-functions">Factory Functions</a>や<a href="https://react-redux.js.org/using-react-redux/connect-mapstate#only-perform-expensive-operations-when-data-changes">パフォーマンス最適化に関するガイド</a>を見てください。</p>
+</blockquote>
+
+<h3 id="mapdispatchtoprops-object--dispatch-ownprops--object"><code class="language-plaintext highlighter-rouge">mapDispatchToProps?: Object | (dispatch, ownProps?) =&gt; Object</code></h3>
+
+<p><code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>は<code class="language-plaintext highlighter-rouge">connect()</code>の第2引数です。これはobject、関数、渡されないかのいずれかです。</p>
+
+<p>以下のように<code class="language-plaintext highlighter-rouge">connect()</code>の第2引数(<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>)を指定しない場合、コンポーネントはデフォルトで<code class="language-plaintext highlighter-rouge">dispatch</code>を受け取ります。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// `mapDispatchToProps`を渡さない。</span>
+<span class="nx">connect</span><span class="p">()(</span><span class="nx">MyComponent</span><span class="p">)</span>
+<span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">)(</span><span class="nx">MyComponent</span><span class="p">)</span>
+<span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">mergeProps</span><span class="p">,</span> <span class="nx">options</span><span class="p">)(</span><span class="nx">MyComponent</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>が関数の場合、それは最大で2つの引数を持つ関数として定義することができます。</p>
+
+<h4 id="引数-1">引数</h4>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">dispatch: Function</code></li>
+  <li><code class="language-plaintext highlighter-rouge">ownProps?: Object</code></li>
+</ol>
+
+<h5 id="dispatch"><code class="language-plaintext highlighter-rouge">dispatch</code></h5>
+
+<p><code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>の引数が1つと定義されている場合、<code class="language-plaintext highlighter-rouge">store</code>の<code class="language-plaintext highlighter-rouge">dispatch</code>が渡されます。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">mapDispatchToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="c1">// dispatching plain actions</span>
+    <span class="na">increment</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">INCREMENT</span><span class="dl">'</span> <span class="p">}),</span>
+    <span class="na">decrement</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">DECREMENT</span><span class="dl">'</span> <span class="p">}),</span>
+    <span class="na">reset</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">RESET</span><span class="dl">'</span> <span class="p">}),</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="ownprops-1"><code class="language-plaintext highlighter-rouge">ownProps</code></h5>
+
+<p><code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>の引数が1つと定義されている場合、第1引数には<code class="language-plaintext highlighter-rouge">dispatch</code>が渡されます。第2引数にはラップしているコンポーネントに渡されたpropsが渡されます。新しいpropsが接続済みコンポーネントに渡される度、<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数が実行されます。</p>
+
+<p>第2引数は<code class="language-plaintext highlighter-rouge">ownProps</code>と言われます。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// binds on component re-rendering</span>
+<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">toggleTodo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">todoId</span><span class="p">)}</span> <span class="sr">/</span><span class="err">&gt;
+</span>
+<span class="c1">// binds on `props` change</span>
+<span class="kd">const</span> <span class="nx">mapDispatchToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+  <span class="na">toggleTodo</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">(</span><span class="nx">toggleTodo</span><span class="p">(</span><span class="nx">ownProps</span><span class="p">.</span><span class="nx">todoId</span><span class="p">)),</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>で定義されている引数の数によってownPropsが渡されるか決まります。詳しくは<a href="#mapToProps関数の引数">これ</a>を見てください。</p>
+
+<h4 id="戻り値-1">戻り値</h4>
+
+<p><code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数はobjectを返す必要があります。そのobjectの各フィールドは関数でなければなりません。その関数が実行されるとactionがstoreにdispatchされます。<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数の戻り値は<code class="language-plaintext highlighter-rouge">dispatchProps</code>と言われます。接続済みコンポーネントのpropsにマージされます。<code class="language-plaintext highlighter-rouge">dispatchProps</code>は<code class="language-plaintext highlighter-rouge">mergeProps</code>の第2引数になります。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">createMyAction</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">MY_ACTION</span><span class="dl">'</span> <span class="p">})</span>
+<span class="kd">const</span> <span class="nx">mapDispatchToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">dispatch</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">boundActions</span> <span class="o">=</span> <span class="nx">bindActionCreators</span><span class="p">({</span> <span class="nx">createMyAction</span> <span class="p">},</span> <span class="nx">dispatch</span><span class="p">)</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">dispatchPlainObject</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">MY_ACTION</span><span class="dl">'</span> <span class="p">}),</span>
+    <span class="na">dispatchActionCreatedByActionCreator</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">dispatch</span><span class="p">(</span><span class="nx">createMyAction</span><span class="p">()),</span>
+    <span class="p">...</span><span class="nx">boundActions</span><span class="p">,</span>
+    <span class="c1">// こうやってdispatchを渡すこともできます。</span>
+    <span class="nx">dispatch</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>mapDispatchToPropsを使いこなしたい場合は、<a href="https://react-redux.js.org/using-react-redux/connect-mapdispatch">こちら</a>を見てください。</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>をfactory function(objectでなく関数を返す関数)として定義している場合、その戻り値の関数が<code class="language-plaintext highlighter-rouge">mapStateToProps</code>や<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>として扱われます。詳しくは<a href="#factory-functions">Factory Functions</a>や<a href="https://react-redux.js.org/using-react-redux/connect-mapstate#only-perform-expensive-operations-when-data-changes">パフォーマンス最適化に関するガイド</a>を見てください。</p>
+</blockquote>
+
+<h4 id="object-shorthand-form">Object Shorthand Form</h4>
+
+<p>以下のように、<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>は<a href="https://japanese-document.github.io/redux/glossary.html#action-creator">action creator</a>を値に持つobjectにすることもできます。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">addTodo</span><span class="p">,</span> <span class="nx">deleteTodo</span><span class="p">,</span> <span class="nx">toggleTodo</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="kd">const</span> <span class="nx">mapDispatchToProps</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">addTodo</span><span class="p">,</span>
+  <span class="nx">deleteTodo</span><span class="p">,</span>
+  <span class="nx">toggleTodo</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>このケースではReact-Reduxは<code class="language-plaintext highlighter-rouge">bindActionCreators</code>を使って各action creatorをstoreの<code class="language-plaintext highlighter-rouge">dispatch</code>にbindします。<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>の戻り値は<code class="language-plaintext highlighter-rouge">dispatchProps</code>と言われます。接続済みコンポーネントのpropsにマージされるか<code class="language-plaintext highlighter-rouge">mergeProps</code>の第2引数になります。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// internally, React-Redux calls bindActionCreators</span>
+<span class="c1">// to bind the action creators to the dispatch of your store</span>
+<span class="nx">bindActionCreators</span><span class="p">(</span><span class="nx">mapDispatchToProps</span><span class="p">,</span> <span class="nx">dispatch</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>のObject Shorthand Formを使ったやり方について詳しく知りたい場合は<a href="https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object">こちら</a>を見てください。</p>
+
+<h3 id="mergeprops-stateprops-dispatchprops-ownprops--object"><code class="language-plaintext highlighter-rouge">mergeProps?: (stateProps, dispatchProps, ownProps) =&gt; Object</code></h3>
+
+<p><code class="language-plaintext highlighter-rouge">mergeProps</code>はラップされたコンポーネントに最終的に渡るpropsを決定します。<code class="language-plaintext highlighter-rouge">mergeProps</code>がconnect関数に渡されてない場合、ラップされたコンポーネントにはデフォルトで<code class="language-plaintext highlighter-rouge">{ ...ownProps, ...stateProps, ...dispatchProps }</code> が渡されます。</p>
+
+<h4 id="引数-2">引数</h4>
+
+<p><code class="language-plaintext highlighter-rouge">mergeProps</code>は最大で3つの引数を渡すことができます。それらの引数は、それぞれ、<code class="language-plaintext highlighter-rouge">mapStateToProps()</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps()</code>の戻り値とラップしているコンポーネントの<code class="language-plaintext highlighter-rouge">props</code>です。</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">stateProps</code></li>
+  <li><code class="language-plaintext highlighter-rouge">dispatchProps</code></li>
+  <li><code class="language-plaintext highlighter-rouge">ownProps</code></li>
+</ol>
+
+<p><code class="language-plaintext highlighter-rouge">mergeProps</code>が返す素のobjectにある各値はラップされたコンポーネントのpropsになります。この関数でpropsに応じてstateの一部らから更に値を抽出したり、action creatorに特定のpropsの値をbindしたりすることができます。</p>
+
+<h4 id="戻り値-2">戻り値</h4>
+
+<p><code class="language-plaintext highlighter-rouge">mergeProps</code>の戻り値は<code class="language-plaintext highlighter-rouge">mergedProps</code>と言われます。これの各値はラップされたコンポーネントのpropsになります。</p>
+
+<h3 id="options-object"><code class="language-plaintext highlighter-rouge">options?: Object</code></h3>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="nx">context</span><span class="p">?:</span> <span class="nb">Object</span><span class="p">,</span>
+  <span class="nx">pure</span><span class="p">?:</span> <span class="nx">boolean</span><span class="p">,</span>
+  <span class="nx">areStatesEqual</span><span class="p">?:</span> <span class="nb">Function</span><span class="p">,</span>
+  <span class="nx">areOwnPropsEqual</span><span class="p">?:</span> <span class="nb">Function</span><span class="p">,</span>
+  <span class="nx">areStatePropsEqual</span><span class="p">?:</span> <span class="nb">Function</span><span class="p">,</span>
+  <span class="nx">areMergedPropsEqual</span><span class="p">?:</span> <span class="nb">Function</span><span class="p">,</span>
+  <span class="nx">forwardRef</span><span class="p">?:</span> <span class="nx">boolean</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="context-object"><code class="language-plaintext highlighter-rouge">context: Object</code></h4>
+
+<blockquote>
+  <p>注意: この変数は6.0以上でサポートされています。</p>
+</blockquote>
+
+<p>React-Redux 6.0からReact-Redux内で使用できるカスタムcontextインスタンスを設定できるようになりました。contextインスタンスを<code class="language-plaintext highlighter-rouge">&lt;Provider /&gt;</code>と接続済みコンポーネントに渡す必要があります。contextインスタンスを接続済みコンポーネントに渡す方法は、このオプションを使う方法とレンダリング時に接続済みコンポーネントのprops経由で渡す方法があります。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// const MyContext = React.createContext();</span>
+<span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span> <span class="na">context</span><span class="p">:</span> <span class="nx">MyContext</span> <span class="p">})(</span>
+  <span class="nx">MyComponent</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="pure-boolean"><code class="language-plaintext highlighter-rouge">pure: boolean</code></h4>
+
+<ul>
+  <li>default value: <code class="language-plaintext highlighter-rouge">true</code></li>
+</ul>
+
+<p>ラップされたコンポーネントは”pure” componentとみなされ、propsやRedux Storeのstate以外の入力やstateには依存しないとみなされます。</p>
+
+<p><code class="language-plaintext highlighter-rouge">options.pure</code>の場合、<code class="language-plaintext highlighter-rouge">connect</code>は不要な<code class="language-plaintext highlighter-rouge">mapStateToProps</code>、<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>、<code class="language-plaintext highlighter-rouge">mergeProps</code>、<code class="language-plaintext highlighter-rouge">render</code>の呼び出しを予防するために複数の等価チェックを行います。その等価チェックは<code class="language-plaintext highlighter-rouge">areStatesEqual</code>、<code class="language-plaintext highlighter-rouge">areOwnPropsEqual</code>、<code class="language-plaintext highlighter-rouge">areStatePropsEqual</code>、<code class="language-plaintext highlighter-rouge">areMergedPropsEqual</code>です。これらの関数はデフォルトの物で99%の場合で問題ありませんが、パフォーマンスや別の理由でこれらを置き換えたいかもしれません。</p>
+
+<p>以下でそれらの例を示します。</p>
+
+<h4 id="arestatesequal-next-object-prev-object--boolean"><code class="language-plaintext highlighter-rouge">areStatesEqual: (next: Object, prev: Object) =&gt; boolean</code></h4>
+
+<ul>
+  <li>default value: <code class="language-plaintext highlighter-rouge">strictEqual: (next, prev) =&gt; prev === next</code></li>
+</ul>
+
+<p>pureが有効な場合、現在のstore stateと1つ前のそれを比較します。</p>
+
+<p><em>例 1</em></p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">areStatesEqual</span> <span class="o">=</span> <span class="p">(</span><span class="nx">next</span><span class="p">,</span> <span class="nx">prev</span><span class="p">)</span> <span class="o">=&gt;</span>
+  <span class="nx">prev</span><span class="p">.</span><span class="nx">entities</span><span class="p">.</span><span class="nx">todos</span> <span class="o">===</span> <span class="nx">next</span><span class="p">.</span><span class="nx">entities</span><span class="p">.</span><span class="nx">todos</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>の処理コストが高い、かつ、それがstateのごく一部のみに依存している場合は<code class="language-plaintext highlighter-rouge">areStatesEqual</code>を上書きすると良いと思います。上の例では指定したstateの一部以外のstateの変化は無視されます。</p>
+
+<p><em>例 2</em></p>
+
+<p>store stateを変更するimpure reducersが存在している場合、<code class="language-plaintext highlighter-rouge">areStatesEqual</code> は常にfalseを返すと良いと思います。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">areStatesEqual</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="kc">false</span>
+</code></pre></div></div>
+
+<p>おそらく、これは<code class="language-plaintext highlighter-rouge">mapStateToProps</code>関数によって他の等価チェックに影響を及ぼすと思います。</p>
+
+<h4 id="areownpropsequal-next-object-prev-object--boolean"><code class="language-plaintext highlighter-rouge">areOwnPropsEqual: (next: Object, prev: Object) =&gt; boolean</code></h4>
+
+<ul>
+  <li>default value: <code class="language-plaintext highlighter-rouge">shallowEqual: (objA, objB) =&gt; boolean</code>
+( 各objectの各値が等しい場合、trueを返します。 )</li>
+</ul>
+
+<p>pureが有効な場合、現在のpropsと1つ前のpropsを比較します。</p>
+
+<p>現在のpropsを通過させたい場合、<code class="language-plaintext highlighter-rouge">areOwnPropsEqual</code>を上書きすると良いと思います。propsを通過させるには、<code class="language-plaintext highlighter-rouge">mapStateToProps</code>、<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>、<code class="language-plaintext highlighter-rouge">mergeProps</code>を実装する必要があります。(<a href="https://github.com/acdlite/recompose/blob/master/docs/API.md#mapprops">recomposeのmapProps</a>のような別の方法の方が簡単かもしれません。)</p>
+
+<h4 id="arestatepropsequal-next-object-prev-object--boolean"><code class="language-plaintext highlighter-rouge">areStatePropsEqual: (next: Object, prev: Object) =&gt; boolean</code></h4>
+
+<ul>
+  <li>type: <code class="language-plaintext highlighter-rouge">function</code></li>
+  <li>default value: <code class="language-plaintext highlighter-rouge">shallowEqual</code></li>
+</ul>
+
+<p>pureが有効な場合、現在の<code class="language-plaintext highlighter-rouge">mapStateToProps</code>戻り値と1つ前のそれを比較します。</p>
+
+<h4 id="aremergedpropsequal-next-object-prev-object--boolean"><code class="language-plaintext highlighter-rouge">areMergedPropsEqual: (next: Object, prev: Object) =&gt; boolean</code></h4>
+
+<ul>
+  <li>default value: <code class="language-plaintext highlighter-rouge">shallowEqual</code></li>
+</ul>
+
+<p>pureが有効な場合、現在の<code class="language-plaintext highlighter-rouge">mergeProps</code>戻り値と1つ前のそれを比較します。</p>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>が関連するpropsが変更された場合のみ新しいobjectを返すメモ化されたselectorを使っているなら、<code class="language-plaintext highlighter-rouge">areStatePropsEqual</code>を上書きして<code class="language-plaintext highlighter-rouge">strictEqual</code>にした方が良いと思います。<code class="language-plaintext highlighter-rouge">mapStateToProps</code>が実行される度、各propsの余計な等価性チェックを避けることができるので少しだけパフォーマンスが改善します。</p>
+
+<p>selectorが複雑なpropsを生成する場合、<code class="language-plaintext highlighter-rouge">areMergedPropsEqual</code>を上書きして<code class="language-plaintext highlighter-rouge">deepEqual</code>な実装にすると良いと思います。(たぶん、deep equalは再レンダリングよりも速いと思います。)</p>
+
+<h4 id="forwardref-boolean"><code class="language-plaintext highlighter-rouge">forwardRef: boolean</code></h4>
+
+<blockquote>
+  <p>注意: このパラメータはバージョン6.0からサポートされています。</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">{forwardRef : true}</code>が<code class="language-plaintext highlighter-rouge">connect</code>に渡されると、<code class="language-plaintext highlighter-rouge">ref</code>をラップしている接続済みコンポーネントに渡すと<code class="language-plaintext highlighter-rouge">ref.current</code>は内側のラップされたコンポーネントを参照します。</p>
+
+<h2 id="connectの戻り値"><code class="language-plaintext highlighter-rouge">connect()</code>の戻り値</h2>
+
+<p><code class="language-plaintext highlighter-rouge">connect()</code>はコンポーネントを受け取って、注入される追加のpropsを持つそれをラップしているコンポーネントを返すラッパー関数です。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">login</span><span class="p">,</span> <span class="nx">logout</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="kd">const</span> <span class="nx">mapState</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">.</span><span class="nx">user</span>
+<span class="kd">const</span> <span class="nx">mapDispatch</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">login</span><span class="p">,</span> <span class="nx">logout</span> <span class="p">}</span>
+
+<span class="c1">// 1回目: コンポーネントをラップするために使うHOCを返します。</span>
+<span class="kd">const</span> <span class="nx">connectUser</span> <span class="o">=</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapState</span><span class="p">,</span> <span class="nx">mapDispatch</span><span class="p">)</span>
+
+<span class="c1">// 2回目: mergedPropsを持つラップしているコンポーネントを返します。</span>
+<span class="c1">// HOCを使うと異なるコンポーネントに同じ動作を追加することができます。</span>
+<span class="kd">const</span> <span class="nx">ConnectedUserLogin</span> <span class="o">=</span> <span class="nx">connectUser</span><span class="p">(</span><span class="nx">Login</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">ConnectedUserProfile</span> <span class="o">=</span> <span class="nx">connectUser</span><span class="p">(</span><span class="nx">Profile</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>通常、ラッパー関数は変数に格納されることなく、すぐに実行されます。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">login</span><span class="p">,</span> <span class="nx">logout</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="kd">const</span> <span class="nx">mapState</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">.</span><span class="nx">user</span>
+<span class="kd">const</span> <span class="nx">mapDispatch</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">login</span><span class="p">,</span> <span class="nx">logout</span> <span class="p">}</span>
+
+<span class="c1">// connect関数を実行して、すぐにラッパー関数を実行して最終的なラッパーコンポーネントを生成します。</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapState</span><span class="p">,</span> <span class="nx">mapDispatch</span><span class="p">)(</span><span class="nx">Login</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="使用例">使用例</h2>
+
+<p><code class="language-plaintext highlighter-rouge">connect</code>はとても柔軟なので、いろいろな使い方ができます。その使用例を見ていきましょう。</p>
+
+<ul>
+  <li>単に<code class="language-plaintext highlighter-rouge">dispatch</code>を注入してstoreをsubscribeしない。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">()(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>storeをsubscribeなしで、すべてのaction creatorを注入する。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">actionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">actionCreators</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">dispatch</code>とglobal stateの各フィールドを注入する。</li>
+</ul>
+
+<blockquote>
+  <p>以下のようにしないでください。<code class="language-plaintext highlighter-rouge">TodoApp</code>はstateが変更される度、再レンダリングされるのでパフォーマンスの最適化が犠牲になります。
+だから、個々のコンポーネントが必要なstaetの部分のみをsubscribeするようにした方が良いです。</p>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// これはダメ！</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">((</span><span class="nx">state</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">state</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">dispatch</code>と<code class="language-plaintext highlighter-rouge">todos</code>を注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">todos</code>とすべてのaction creatorを注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">actionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">actionCreators</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>-　<code class="language-plaintext highlighter-rouge">todos</code>とすべてのaction creator(<code class="language-plaintext highlighter-rouge">addTodo</code>, <code class="language-plaintext highlighter-rouge">completeTodo</code>, …)を<code class="language-plaintext highlighter-rouge">actions</code>として注入します。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">actionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">bindActionCreators</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">redux</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mapDispatchToProps</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">actions</span><span class="p">:</span> <span class="nx">bindActionCreators</span><span class="p">(</span><span class="nx">actionCreators</span><span class="p">,</span> <span class="nx">dispatch</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">todos</code>と特定のaction creator(<code class="language-plaintext highlighter-rouge">addTodo</code>)を注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">addTodo</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">bindActionCreators</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">redux</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mapDispatchToProps</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">bindActionCreators</span><span class="p">({</span> <span class="nx">addTodo</span> <span class="p">},</span> <span class="nx">dispatch</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">todos</code>と特定のaction creator(<code class="language-plaintext highlighter-rouge">addTodo</code>と<code class="language-plaintext highlighter-rouge">deleteTodo</code>)を注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">addTodo</span><span class="p">,</span> <span class="nx">deleteTodo</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">mapDispatchToProps</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">addTodo</span><span class="p">,</span>
+  <span class="nx">deleteTodo</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">todos</code>と<code class="language-plaintext highlighter-rouge">todoActionCreators</code>と<code class="language-plaintext highlighter-rouge">todoActions</code>として、<code class="language-plaintext highlighter-rouge">counterActionCreators</code>を<code class="language-plaintext highlighter-rouge">counterActions</code>として注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">todoActionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./todoActionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">counterActionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./counterActionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">bindActionCreators</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">redux</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mapDispatchToProps</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">todoActions</span><span class="p">:</span> <span class="nx">bindActionCreators</span><span class="p">(</span><span class="nx">todoActionCreators</span><span class="p">,</span> <span class="nx">dispatch</span><span class="p">),</span>
+    <span class="na">counterActions</span><span class="p">:</span> <span class="nx">bindActionCreators</span><span class="p">(</span><span class="nx">counterActionCreators</span><span class="p">,</span> <span class="nx">dispatch</span><span class="p">),</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">todos</code>と、todoActionCreatorsとcounterActionCreatorsを統合して<code class="language-plaintext highlighter-rouge">actions</code>として注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">todoActionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./todoActionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">counterActionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./counterActionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">bindActionCreators</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">redux</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mapDispatchToProps</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">actions</span><span class="p">:</span> <span class="nx">bindActionCreators</span><span class="p">(</span>
+      <span class="p">{</span> <span class="p">...</span><span class="nx">todoActionCreators</span><span class="p">,</span> <span class="p">...</span><span class="nx">counterActionCreators</span> <span class="p">},</span>
+      <span class="nx">dispatch</span>
+    <span class="p">),</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">todas</code>と、すべての<code class="language-plaintext highlighter-rouge">todoActionCreators</code>と<code class="language-plaintext highlighter-rouge">counterActionCreators</code>の各action creatorをpropsとして注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">todoActionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./todoActionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">counterActionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./counterActionCreators</span><span class="dl">'</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">bindActionCreators</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">redux</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mapDispatchToProps</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">bindActionCreators</span><span class="p">(</span>
+    <span class="p">{</span> <span class="p">...</span><span class="nx">todoActionCreators</span><span class="p">,</span> <span class="p">...</span><span class="nx">counterActionCreators</span> <span class="p">},</span>
+    <span class="nx">dispatch</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">mapDispatchToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>propsに応じて特定のuserの<code class="language-plaintext highlighter-rouge">todos</code>を<code class="language-plaintext highlighter-rouge">todos</code>として注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">actionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span><span class="p">[</span><span class="nx">ownProps</span><span class="p">.</span><span class="nx">userId</span><span class="p">]</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>propsに応じて特定のuserの<code class="language-plaintext highlighter-rouge">todos</code>を<code class="language-plaintext highlighter-rouge">todos</code>として注入します。そして、<code class="language-plaintext highlighter-rouge">props.userId</code>をactionに注入します。</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">actionCreators</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./actionCreators</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span> <span class="na">todos</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">todos</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mergeProps</span><span class="p">(</span><span class="nx">stateProps</span><span class="p">,</span> <span class="nx">dispatchProps</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">ownProps</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">todos</span><span class="p">:</span> <span class="nx">stateProps</span><span class="p">.</span><span class="nx">todos</span><span class="p">[</span><span class="nx">ownProps</span><span class="p">.</span><span class="nx">userId</span><span class="p">],</span>
+    <span class="na">addTodo</span><span class="p">:</span> <span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">dispatchProps</span><span class="p">.</span><span class="nx">addTodo</span><span class="p">(</span><span class="nx">ownProps</span><span class="p">.</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">text</span><span class="p">),</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">mapStateToProps</span><span class="p">,</span> <span class="nx">actionCreators</span><span class="p">,</span> <span class="nx">mergeProps</span><span class="p">)(</span><span class="nx">TodoApp</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="注意点">注意点</h2>
+
+<h3 id="maptoprops関数の引数">mapToProps関数の引数</h3>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数定義の引数の数によって、引数に<code class="language-plaintext highlighter-rouge">ownProps</code>を受け取るか決まります。</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数定義関数定義で引数の数が1つ(func.lengthが1)の場合、<code class="language-plaintext highlighter-rouge">ownProps</code>は<code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数に渡されません。例えば、以下のように定義された関数は第2引数に<code class="language-plaintext highlighter-rouge">ownProps</code>を受け取りません。<code class="language-plaintext highlighter-rouge">ownProps</code>が<code class="language-plaintext highlighter-rouge">undefined</code>の場合、デフォルトの値が使われます。</p>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="c1">// state</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">// undefined</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">mapStateToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">ownProps</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="c1">// state</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ownProps</span><span class="p">)</span> <span class="c1">// {}</span>
+<span class="p">}</span>
+<span class="c1">// console.log(mapStateToProps.length) =&gt; 1</span>
+</code></pre></div></div>
+
+<p>関数が0個または2以上の個数の引数を受け取るように定義されている場合、ownPropsが渡されます。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">mapStateToProps</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="c1">// state</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ownProps</span><span class="p">)</span> <span class="c1">// ownProps</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">mapStateToProps</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">// state</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">// ownProps</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">mapStateToProps</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">args</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">// state</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">// ownProps</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="factory-functions">Factory Functions</h3>
+
+<p><code class="language-plaintext highlighter-rouge">mapStateToProps</code>もしくは<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数が関数を返す場合、コンポーネントがインスタンス化する際に一度だけ実行されます。それらの戻り値は、それ以後、それぞれ<code class="language-plaintext highlighter-rouge">mapStateToProps</code>と<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>関数として取り扱われます。</p>
+
+<p>factory functionsはメモ化されたselectorによく使われます。これによって、クロージャー内にコンポーネントインスタンスごとにselectorを作成することが可能になります。</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">makeUniqueSelectorInstance</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span>
+  <span class="nx">createSelector</span><span class="p">([</span><span class="nx">selectItems</span><span class="p">,</span> <span class="nx">selectItemId</span><span class="p">],</span> <span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">itemId</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">items</span><span class="p">[</span><span class="nx">itemId</span><span class="p">])</span>
+<span class="kd">const</span> <span class="nx">makeMapState</span> <span class="o">=</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">selectItemForThisComponent</span> <span class="o">=</span> <span class="nx">makeUniqueSelectorInstance</span><span class="p">()</span>
+  <span class="k">return</span> <span class="kd">function</span> <span class="nx">realMapState</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">selectItemForThisComponent</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">ownProps</span><span class="p">.</span><span class="nx">itemId</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span> <span class="nx">item</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">connect</span><span class="p">(</span><span class="nx">makeMapState</span><span class="p">)(</span><span class="nx">SomeComponent</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="license">License</h2>
+
+<h3 id="japanese-part">Japanese part</h3>
+
+<p>Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)</p>
+
+<p>Copyright (c) 2021 38elements</p>
+
+<h3 id="other">Other</h3>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2015-present Dan Abramov</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+<hr />
+
+<ul>
+  <li>
+    <p><a href="https://japanese-document.github.io/redux/">Redux</a></p>
+  </li>
+  <li>
+    <p><a href="https://japanese-document.github.io/react-redux/">React Redux</a></p>
+  </li>
+  <li>
+    <p><a href="https://japanese-document.github.io/redux-thunk/">Redux Thunk</a></p>
+  </li>
+</ul>
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>
 
