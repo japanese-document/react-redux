@@ -218,7 +218,7 @@ connect(mapStateToProps, mapDispatchToProps, null, { context: MyContext })(
 
 - default value: `true`
 
-ラップされたコンポーネントは"pure" componentとみなされ、propsやRedux Storeのstate以外の入力やstateには依存しないとみなされます。
+ラップされたコンポーネントは"pure" componentとみなされ、propsとRedux Storeのstate以外の入力やstateには依存しないとみなされます。
 
 `options.pure`がtrueの場合、`connect`は不要な`mapStateToProps`、`mapDispatchToProps`、`mergeProps`、`render`の呼び出しを予防するために複数の等価チェックを行います。その等価チェックは`areStatesEqual`、`areOwnPropsEqual`、`areStatePropsEqual`、`areMergedPropsEqual`です。これらの関数はデフォルトの物で99%の場合で問題ありませんが、パフォーマンスや別の理由でこれらを置き換えたいかもしれません。
 
