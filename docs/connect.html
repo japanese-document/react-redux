@@ -259,9 +259,7 @@
   <li>default value: <code class="language-plaintext highlighter-rouge">true</code></li>
 </ul>
 
-<p>ラップされたコンポーネントはpure component(propsのみに依存するコンポーネントのことでPureComponentではない。)とみなされ、propsとRedux Storeのstate以外の入力やstateには依存しないとみなされます。
-  そして、ラップされたコンポーネントは、propsやrefに基づいて<a href="https://github.com/reduxjs/react-redux/blob/d4e4eba9ccbd488b103b3c5625a37e15b1427d11/src/components/connectAdvanced.tsx#L446-L457">メモ化</a>されます。
-</p>
+<p>ラップされたコンポーネントはpure component(propsのみに依存するコンポーネントのことでPureComponentではない。)とみなされ、propsとRedux Storeのstate以外の入力やstateには依存しないとみなされます。</p>
 
 <p><code class="language-plaintext highlighter-rouge">options.pure</code>がtrueの場合、<code class="language-plaintext highlighter-rouge">connect</code>は不要な<code class="language-plaintext highlighter-rouge">mapStateToProps</code>、<code class="language-plaintext highlighter-rouge">mapDispatchToProps</code>、<code class="language-plaintext highlighter-rouge">mergeProps</code>、<code class="language-plaintext highlighter-rouge">render</code>の呼び出しを予防するために複数の等価チェックを行います。その等価チェックは<code class="language-plaintext highlighter-rouge">areStatesEqual</code>、<code class="language-plaintext highlighter-rouge">areOwnPropsEqual</code>、<code class="language-plaintext highlighter-rouge">areStatePropsEqual</code>、<code class="language-plaintext highlighter-rouge">areMergedPropsEqual</code>です。これらの関数はデフォルトの物で99%の場合で問題ありませんが、パフォーマンスや別の理由でこれらを置き換えたいかもしれません。</p>
 
@@ -296,7 +294,7 @@
 
 <ul>
   <li>default value: <code class="language-plaintext highlighter-rouge">shallowEqual: (objA, objB) =&gt; boolean</code>
-( 各objectの各値が等しい場合、trueを返します。 )</li>
+( 各objectの各フィールドの値が等しい場合、trueを返します。 )</li>
 </ul>
 
 <p>pureが有効な場合、現在のpropsと1つ前のpropsを比較します。</p>
