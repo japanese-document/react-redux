@@ -218,7 +218,7 @@ connect(mapStateToProps, mapDispatchToProps, null, { context: MyContext })(
 
 - default value: `true`
 
-ラップされたコンポーネントはpure component(propsのみに依存するコンポーネントのことでPureComponentではない。)とみなされ、propsとRedux Storeのstate以外の入力やstateには依存しないとみなされます。そして、ラップされたコンポーネントは、propsやrefに基づいて[メモ化](https://github.com/reduxjs/react-redux/blob/d4e4eba9ccbd488b103b3c5625a37e15b1427d11/src/components/connectAdvanced.tsx#L446-L457)されます。
+ラップされたコンポーネントはpure component(propsのみに依存するコンポーネントのことでPureComponentではない。)とみなされ、propsとRedux Storeのstate以外の入力やstateには依存しないとみなされます。
 
 `options.pure`がtrueの場合、`connect`は不要な`mapStateToProps`、`mapDispatchToProps`、`mergeProps`、`render`の呼び出しを予防するために複数の等価チェックを行います。その等価チェックは`areStatesEqual`、`areOwnPropsEqual`、`areStatePropsEqual`、`areMergedPropsEqual`です。これらの関数はデフォルトの物で99%の場合で問題ありませんが、パフォーマンスや別の理由でこれらを置き換えたいかもしれません。
 
@@ -252,7 +252,7 @@ const areStatesEqual = () => false
 #### `areOwnPropsEqual: (next: Object, prev: Object) => boolean`
 
 - default value: `shallowEqual: (objA, objB) => boolean`
-  ( 各objectの各値が等しい場合、trueを返します。 )
+  ( 各objectの各フィールドの値が等しい場合、trueを返します。 )
 
 pureが有効な場合、現在のpropsと1つ前のpropsを比較します。
 
